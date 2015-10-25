@@ -14,6 +14,7 @@
 #include<pthread.h>
 #include"CurrentThread.h"
 
+
 #ifdef NDEBUG
 __BEGIN_DECLS
 extern void __assert_perror_fail(int errnum,const char *file,unsigned int line,const char *function)
@@ -42,6 +43,7 @@ namespace muduo
 			{
 				assert(holder_ == 0);
 				MCHECK(pthread_mutex_destroy(&mutex_));
+
 			}
 
 			//判断是否被当前线程锁定
@@ -60,7 +62,7 @@ namespace muduo
 			{
 				MCHECK(pthread_mutex_lock(&mutex_));
 				//获得锁拥有者
-				assignHolder();
+				 assignHolder();
 			}
 
 			//封装pthread_mutex_unlock
@@ -90,9 +92,9 @@ namespace muduo
 					~UnassignGuard()
 					{
 						owner_.assignHolder();
-					}
+				 	}
 				private:
-					MutexLock &owner_;
+				 	MutexLock &owner_;
 			};
 
 			void unassignHolder()

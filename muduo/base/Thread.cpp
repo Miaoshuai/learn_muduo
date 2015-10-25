@@ -116,7 +116,7 @@ namespace muduo
 				}
 				catch (const Exception& ex)
   				  {
-     				muduo::CurrentThread::t_threadName = "crashed";
+      				muduo::CurrentThread::t_threadName = "crashed";
       				fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
       				fprintf(stderr, "reason: %s\n", ex.what());
       				fprintf(stderr, "stack trace: %s\n", ex.stackTrace());
@@ -124,14 +124,14 @@ namespace muduo
    				 }
     			catch (const std::exception& ex)
     			{
-      				muduo::CurrentThread::t_threadName = "crashed";
+       				muduo::CurrentThread::t_threadName = "crashed";
       				fprintf(stderr, "exception caught in Thread %s\n", name_.c_str());
      				fprintf(stderr, "reason: %s\n", ex.what());
      				abort();
    				 }
     			catch (...)
     			{
-      				muduo::CurrentThread::t_threadName = "crashed";
+       				muduo::CurrentThread::t_threadName = "crashed";
       				fprintf(stderr, "unknown exception caught in Thread %s\n", name_.c_str());
       				throw; // rethrow
     			}				
@@ -142,8 +142,9 @@ namespace muduo
 		{
 			ThreadDate *data = static_cast<ThreadDate *>(obj);
 			data->runInThread();
+			//如果设成智能指针的话，那么可能data要存在很久才会被释放
 			delete data;
-			return NULL
+			return NULL;
 		}	
 
 	}
@@ -230,7 +231,7 @@ void Thread::start()
 	assert(!started_);
 	started_ = true;
 	
-	//什么时候释放new的空间？
+	//线程函数运行完就释放资源,不用智能指针
 	detail::ThreadDate *data = new detail::ThreadDate(func_,name_,tid_);
 	
 	if(pthread_create(&pthreadId_,NULL,&detail::startThread,data))

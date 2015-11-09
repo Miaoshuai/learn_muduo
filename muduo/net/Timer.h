@@ -29,6 +29,7 @@ namespace net
                 sequence_(s_numCreated_.incrementAndGet())
         {}
 
+            //执行超时回调
             void run()const
             {
                 callback_;
@@ -60,7 +61,7 @@ namespace net
             Timestamp expiration_;          //定时器超时的时间值
             const double interval_;         //多次定时的周期
             const bool repeat_;             //是否周期定时
-            const int64_t sequence_;        //周期定时的次数
+            const int64_t sequence_;        //当前定时器的序列号
 
             static AtomicInt64 s_numCreated_;
 

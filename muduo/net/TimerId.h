@@ -32,10 +32,10 @@ namespace net
         
         }
 
-        friend class TimerQueue;
+        friend class TimerQueue;        //TimerQueue为其友元，可以操作其私有数据
         private:
-            Timer *timer_;
-            int64_t sequence_;
+            Timer *timer_;               //定时器指针
+            int64_t sequence_;          //定时器序列号
     };
 }
 }

@@ -103,7 +103,7 @@ void EPollPoller::fillActiveChannels(int numEvents,ChannelList *activeChannels)c
         assert(it->second == channel);
 #endif
         channel->set_revents(events_[i].events);
-        activeChannels->push_back(channel);
+        activeChannels->push_back(channel);             //添加到activeChannel表上
     }
 }
 
@@ -121,7 +121,7 @@ void EPollPoller::updateChannel(Channel *channel)
         if(index == KNew)
         {
             assert(channel_.find(fd) == channel_.end());
-            channel_[fd] = channel;
+            channel_[fd] = channel;                 //添加到map中
         }
 
         else
@@ -167,28 +167,29 @@ void EPollPoller::removeChannel(Channel *channel)
 
     int index = channel->index();
     assert(index == kAdded || index == KDeleted);
-    size_t n = channels_.erase(fd);
+    size_t n = channels_.erase(fd);         //从map里删除
     (void)n;
     assert(n == 1);
 
     if(index == kAdded)
     {
-        update(EPOLL_CTL_DEL,channel);
+        update(EPOLL_CTL_DEL,channel);  //更新epoll事件表中内容
     }
     channel->set_index(kNew);
 }
 
+//更新channel
 void EPollPoller::update(int operation,Channel *channel)
 {
     struct epoll_event event;
     bzero(&event,sizeof event);
-    event.events = channel->events();
+    event.events = channel->events();    //获取事件
     event.data.ptr = channel;
     int fd = channel->fd();
     LOG_TRACE << "epoll_ctl op = " << operayionToString(operation)
         << "fd = " << fd << "event = {" << channel->reventsToString()<<"}";
 
-    if(::epoll_ctl(epollfd_,operation,fd,&event) < 0)
+    if(::epoll_ctl(epollfd_,operation,fd,&event) < 0)   //更改fd上的事件
     {
         if(operation == EPOLL_CTL_DEL)
         {

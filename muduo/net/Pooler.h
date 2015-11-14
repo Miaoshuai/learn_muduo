@@ -40,8 +40,10 @@ namespace net
             //移除Channel
             virtual void removeChannel(Channel *channel) = 0;
 
+            //这个channel是否在map中存在
             virtual bool hasChannel(Channel *channel)const;
 
+            //默认poller方式
             static Poller *newDefaultPoller(EventLoop *loop);
 
             void assertInLoopThread()const
@@ -51,9 +53,9 @@ namespace net
 
         protected:
             typedef std::map<int,Channel*> ChannelMap;
-            ChannelMap Channels_;
+            ChannelMap Channels_;           //存储事件分发器的map
         private:
-            EventLoop *owerLoop_;
+            EventLoop *owerLoop_;           //属于哪个loop
     };
 }
 }

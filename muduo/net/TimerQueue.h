@@ -67,7 +67,7 @@ namespace net
             TimerList timers_;      //定时器集合
 
             //for cancel()
-            ActiveTimerSet activeTimers_;
+            ActiveTimerSet activeTimers_;   //到期的定时器
             bool callingExpiredTimers_;
             ActiveTimerSet cancelingTimers_;
 

@@ -145,41 +145,44 @@ namespace net
                 logHup_ = false;
             }
 
+            //该channel所属的loop
             EventLoop *ownerLoop()
             {
                 return loop_;
             }
 
+            //移除该事件分发器
             void remove();
         private:
             //将事件字符串化
             static string eventsToString(int fd,int ev);
 
+            //更新事件事件分发器
             void update();
 
             //事件处理
             void handleEventWithGuard(Timestamp receiveTime);
 
             //定义事件类型变量
-            static const int kNoneEvent;
-            static const int kReadEvent;
-            static const int kWriteEvent;
+            static const int kNoneEvent;    //无事件
+            static const int kReadEvent;    //可读事件
+            static const int kWriteEvent;   //可写事件
 
-            EventLoop *loop_;
-            const int fd_;
+            EventLoop *loop_;               //channel所属的loop
+            const int fd_;                  //channel负责的文件描述符
             int events_;            //注册的事件
             int revents_;           //就绪的事件
-            int index_;
-            bool logHup_;
+            int index_;             //被poller使用的下标
+            bool logHup_;           //是否生成某些日志
 
-            boost::weak_ptr<void> tie_;
+            boost::weak_ptr<void> tie_; //
             bool tied_;
             bool eventHandling_;
             bool addedToLoop_;
-            ReadEventCallback readCallback_;
-            EventCallback writeCallback_;
-            EventCallback closeCallback_;
-            ReadEventCallback errorCallback_;
+            ReadEventCallback readCallback_;    //读事件回调
+            EventCallback writeCallback_;       //写事件回调
+            EventCallback closeCallback_;       //关闭事件回调
+            ReadEventCallback errorCallback_;   //错误事件回调
 
     };
 }

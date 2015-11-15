@@ -29,6 +29,21 @@ namespace net
 
             Acceptor(EventLoop *loop, const InetAddress &listenAddr, reuseport);
             ~Acceptor();
+
+            //设置新连接的回调
+            void setNewConnectionCallback(const NewConnectionCallback &cb)
+            {
+                newConnectionCallback_ = cb;
+            }
+
+            //判断是否在监听
+            bool listenning()const
+            {
+                return listenning_;
+            }
+
+            //开始监听
+            void listen();
         private:
             void handleRead();
 

@@ -161,6 +161,7 @@ void TcpConnection::sendInLoop(const void *data,size_t len)
     }
 
     assert(remaining <= len);
+    //有可能元数据字节没执行上面的直接往套接字写
     if(!faultError && remaining > 0)
     {
         size_t oldLen = outputBuffer_.readableBytes();  //buffer中已有的字节数
@@ -310,7 +311,7 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 }
 
 
-//处理写
+//直接往套接字写没写完，buffer里有数据，才调用此
 void TcpConnection::handleWrite()
 {
     loop_->assertInLoopThread();

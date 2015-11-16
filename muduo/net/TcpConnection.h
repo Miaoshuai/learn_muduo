@@ -135,21 +135,21 @@ namespace net
           const char *stateToString()const;
 
           EventLoop *loop_;         //所属的loop
-          const string name_;       //map的key
+          const string name_;       //map的key，TcpServer管理
           StateE state_;            //状态
 
           boost::scoped_ptr<Socket> socket_;
           boost::scoped_ptr<Channel> channel_;  //管理socket_
           const InetAddress localAddr_;
           const InetAddress peerAddr_;
-          ConnectionCallback connectionCallback_;
-          MessageCallback messageCallback_;
+          ConnectionCallback connectionCallback_;   //连接回调
+          MessageCallback messageCallback_;         
           WriteCompleteCallback writeCompleteCallback_;
           HighWaterMarkCallback highWaterMarkCallback_;
-          CloseCallback closeCallback_;
-          size_t highWaterMark_;
-          Buffer inputBuffer_;
-          Buffer outputBuffer_;
+          CloseCallback closeCallback_;     //关闭回调
+          size_t highWaterMark_;            //高水位标志
+          Buffer inputBuffer_;              //输入缓冲区
+          Buffer outputBuffer_;             //输出缓冲区
           boost::any context_;
 
               

@@ -40,7 +40,7 @@ EventLoopThread::~EventLoopThread()
 EventLoop *EventLoopThread::startLoop()
 {
     assert(!thread_.started());
-    thread_.start();
+    thread_.start();            //新建loop线程
 
     {
         MutexLockGuard lock(mutex_);
@@ -49,6 +49,7 @@ EventLoop *EventLoopThread::startLoop()
             cond_.wait();
         }
     }
+    return loop_;   //给调用线程返回新建的loop指针
 }
 
 

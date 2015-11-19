@@ -78,7 +78,7 @@ void TcpServer::start()
 void TcpServer::newConnection(int sockfd,const InetAddress &peerAddr)
 {
     loop_->assertInLoopThread();
-    EventLoop *ioLoop = threadPool_->getNextLoop();
+    EventLoop *ioLoop = threadPool_->getNextLoop(); //轮流用线程池中的loop线程
     char buf[32];
     snprintf(buf,sizeof buf, ":%s#%d",hostport_c_str(),nextConnId_);
     ++nextConnId_;
@@ -87,12 +87,13 @@ void TcpServer::newConnection(int sockfd,const InetAddress &peerAddr)
     InetAddress localAddr(sockets::getLocalAddr(sockfd));
 
     //创建连接对象
-    TcpConnectionPtr conn(new TcpConnection(ioLoop,
+    TcpConnectionPtr conn(new TcpConnection(ioLoop,     //连接固定属于某个ioloop
                                            connName,
                                            sockfd,
                                            localAddr,
                                            peerAddr));
     connections_[connName] = conn;
+    //为TcpConnection设置各个回调
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
     conn->setWriteCompleteCallback(writeCompleteCallback_);
@@ -115,7 +116,7 @@ void TcpServer::removeConnectionInLoop(const TcpConnectionPtr &conn)
     assert( n == 1);
     EventLoop *ioLoop = conn->getLoop();
     ioLoop->queueInLoop(
-            boost::bind(&TcpConnection::connectionDestroyed,conn));
+            boost::bind(&TcpConnection::connectionDestroyed,conn));//加入队列在主I/O线程中销毁
 }
 
 

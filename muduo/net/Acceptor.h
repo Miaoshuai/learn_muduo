@@ -50,7 +50,7 @@ namespace net
             EventLoop *loop_;           //所属的loop循环
             Socket acceptSocket_;       //接受socket
             Channel acceptChannel_;     //管理acceptSocket_的channel
-            NewConnectionCallback newConnectionCallback_;   //处理新连接的回调
+            NewConnectionCallback newConnectionCallback_;   //处理新连接的回调，可以自定义
             bool listenning_;           //是否监听
             int idlefd_;
 

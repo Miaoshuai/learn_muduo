@@ -291,11 +291,11 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 {
     loop_->assertInLoopThread();
     int savedErrno = 0;
-    ssize_t n = inputBuffer_.readFd(channel_->fd,&savedErrno);
+    ssize_t n = inputBuffer_.readFd(channel_->fd,&savedErrno);  //先读到buffer中
 
     if(n > 0)
     {
-        //通知应用
+        //通知应用，让其从buffer中读取数据
         messageCallback_(shared_from_this(),&inputBuffer_,receiveTime);
     }
     else if(n == 0)
@@ -330,7 +330,7 @@ void TcpConnection::handleWrite()
                 //调用写完成回调
                 if(writeCompleteCallback_)
                 {
-                    loop_->queueInLoop(boost::bind(writeCompleteCallback_,shared_from_this()));
+                    loop_->queueInLoop(boost::bind(writeCompleteCallback_,shared_from_this()));//在主I/O线程中完成
                 }
                 if(state_ == kDisconnecting)
                 {
@@ -359,7 +359,7 @@ void TcpConnection::handleClose()
     assert(state_ == kConnected || state_ == kDisconnecting);
 
     setState(kDisconnected);
-    channel_->disableAll();
+    channel_->disableAll();     //清空事件
 
     TcpConnectionPtr guardThis(shared_from_this());
     connectionCallback_(guardThis);
@@ -367,7 +367,7 @@ void TcpConnection::handleClose()
     closeCallback_(guardThis);
 }
 
-
+//处理错误
 void TcpConnection::handleError()
 {
     int err = sockets::getSocketError(channel_->fd());

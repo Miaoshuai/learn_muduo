@@ -75,7 +75,7 @@ namespace net
           {
             return &context_;
           }
-
+          //设置连接回调
           void setConnectionCallback(const ConnectionCallback &cb)
           {
             connectionCallback_ = cb;

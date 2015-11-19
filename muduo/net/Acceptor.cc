@@ -29,6 +29,7 @@ Acceptor::Acceptor(EventLoop *loop,const InetAddress & listenAddr,bool reuseport
     idleFd_(::open("/dev/null",O_RDONLY | O_CLOEXEC))
 {
     assert(idleFd_ >= 0);
+    //设置监听socket
     acceptSocket_.setReuseAddr(true);
     acceptSocket_.setReusePort(reuseport);  //端口重用
     acceptSocket_.bindAddress(listenAddr);  //绑定监听套接字
@@ -57,12 +58,14 @@ void Acceptor::handleRead()
     loop_->assertInLoopThread();
     InetAddress peerAddr;
 
+    //接受新连接，如果是短链接可以尝试用循环接受
     int connfd = acceptSocket_.accept(&peerAddr);
 
     if(connfd > 0)
     {
         if(newConnectionCallback_)
         {
+            //新连接到来时调用newcallback
             newConnectionCallback_(connfd,peerAddr);
         }
         else

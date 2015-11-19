@@ -50,7 +50,7 @@ namespace net
             //线程池的线程个数
             void setThreadNum(int numThreads);
 
-            //设置线程池初始化回调函数
+            //设置线程池初始化回调函数，归threadPool_调用
             void setThreadInitCallback(const ThreadInitCallback &cb)
             {
                 threadInitCallback_ = cb;
@@ -95,12 +95,12 @@ namespace net
             EventLoop *loop_;            //所属的事件循环
             const string hostport_;      //本机端口
             const string name_;
-            boost::scoped_ptr<Acceptor> acceptor; //连接管理对象
-            boost::shared_ptr<EventLoopThreadPool> threadPool_;
-            ConnectionCallback connectionCallback_;  //连接以后的回调
-            MessageCallback messageCallback_;        //消息回调
-            WriteCompleteCallback writeCompleteCallback_; //写完成回调
-            ThreadInitCallback threadInitCallback_;  //线程初始化回调
+            boost::scoped_ptr<Acceptor> acceptor; //连接管理类对象
+            boost::shared_ptr<EventLoopThreadPool> threadPool_;//loop线程池
+            ConnectionCallback connectionCallback_;  //连接以后的回调供TcpConnection调用
+            MessageCallback messageCallback_;        //消息回调,同上
+            WriteCompleteCallback writeCompleteCallback_; //写完成回调，同上
+            ThreadInitCallback threadInitCallback_;  //线程初始化回调，同上
             AtomicInt32 started_;
 
             int nextConnId_;

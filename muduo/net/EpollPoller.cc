@@ -30,9 +30,9 @@ BOOST_STATIC_ASSERT(EPOLLHUP == POLLHUP);
 
 namespace
 {
-    const int KNew = -1;
-    const int KAdded = 1;
-    const int KDeleted = 2;
+    const int KNew = -1;    //新建Channel时，将index设为此
+    const int KAdded = 1;   //修改channel时所设的标志
+    const int KDeleted = 2;//channel在事件注册表里，但它的事件为空
 }
 
 

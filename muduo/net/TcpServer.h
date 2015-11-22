@@ -65,13 +65,13 @@ namespace net
             //启动server端开始监听
             void start();
 
-            //设置连接回调
+            //设置连接回调，用户自定义
             void setConnectionCallback(const ConnectionCallback &cb)
             {
                 connectionCallback_ = cb;
             }
 
-            //设置消息回调
+            //设置消息回调,TcpConnection中处理完handleRead之后使用
             void setMessageCallback(const MessageCallback &cb)
             {
                 messageCallback_ = cb;

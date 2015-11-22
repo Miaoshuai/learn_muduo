@@ -67,10 +67,10 @@ void TcpServer::start()
 {
     if(started_.getAndSet(1) == 0)
     {
-        threadPool_->start(threadInitCallback_);
+        threadPool_->start(threadInitCallback_);    //启动线程池
         assert(!acceptor_->listenning());
         loop_->runInLoop(
-                boost::bind(&Acceptor::listen,get_pointer(acceptor_)));
+                boost::bind(&Acceptor::listen,get_pointer(acceptor_)));     //监听套接字开启
     }
 }
 

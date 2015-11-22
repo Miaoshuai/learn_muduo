@@ -17,7 +17,7 @@
 using namespace muduo;
 using namespace muduo::net;
 
-//默认连接回调
+//默认错误回调
 void muduo::net::defaultConnectionCallback(const TcpConnectionPtr &conn)
 {
     LOG_TRACE << conn->localAddress().toIpPort() << "->"
@@ -25,7 +25,7 @@ void muduo::net::defaultConnectionCallback(const TcpConnectionPtr &conn)
               << (conn->connected() ? "UP" : "Down");   
 }
 
-//默认消息回调
+//错误消息回调
 void muduo::net::defaultMessageCallback(const TcpConnectionPtr &,
                                         Buffer *buf,
                                         Timestamp)
@@ -47,6 +47,7 @@ TcpConnectionPtr::TcpConnection(EventLoop *loop,
     peerAddr_(peerAddr),
     highWaterMark_(64*1024*1024)
 {
+    //设置各种回调
     channel_->setReadCallback(boost::bind(&TcpConnection::handleRead,this,_1));
     channel_->setWriteCallback(boost::bind(&TcpConnection::handleWrite,this));
     channel_->setCloseCallback(boost::bind(&TcpConnection::handleClose,this));
@@ -295,7 +296,7 @@ void TcpConnection::handleRead(Timestamp receiveTime)
 
     if(n > 0)
     {
-        //通知应用，让其从buffer中读取数据
+        //通知应用，让其从buffer中读取数据，由应用程序自定义
         messageCallback_(shared_from_this(),&inputBuffer_,receiveTime);
     }
     else if(n == 0)

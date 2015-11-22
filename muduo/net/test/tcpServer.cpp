@@ -13,17 +13,23 @@
 #include <muduo/net/TcpConnection.h>
 #include <muduo/base/Timestamp.h>
 #include <muduo/net/Buffer.h>
+#include <string>
+#include <iostream>
+#include <muduo/base/StringPiece.h>
 
 //新来连接和其断开时调用
 void connectionCallback(const muduo::net::TcpConnectionPtr &)
 {
     printf("111\n");
+
 }
 
 //收到消息时调用
-void messageCallback(const muduo::net::TcpConnectionPtr &,muduo::net::Buffer *,muduo::Timestamp)
+void messageCallback(const muduo::net::TcpConnectionPtr &,muduo::net::Buffer *buffer,muduo::Timestamp)
 {
     printf("222\n");
+    muduo::string s(buffer->retrieveAllAsString());
+    std::cout<<s<<std::endl;
 }
 //给客户端写完成时调用
 void writeCompleteCallback(const muduo::net::TcpConnectionPtr &)

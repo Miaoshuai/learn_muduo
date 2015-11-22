@@ -31,7 +31,10 @@ void writeCompleteCallback(const muduo::net::TcpConnectionPtr &)
     printf("333\n");
 }
 
-
+void threadInitCallback(muduo::net::EventLoop *)
+{
+    printf("444\n");
+}
 
 int main(int argc,char **argv)
 {
@@ -43,6 +46,10 @@ int main(int argc,char **argv)
     server.setConnectionCallback(connectionCallback);
     server.setMessageCallback(messageCallback);
     server.setWriteCompleteCallback(writeCompleteCallback);
+    
+    server.setThreadNum(5);     //设置新增线程数为5
+    server.setThreadInitCallback(threadInitCallback);   //设置线程回调函数
+    server.start();             //开始运行各个新增loop
 
     server.start();
        

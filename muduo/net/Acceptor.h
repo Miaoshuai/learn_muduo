@@ -52,7 +52,7 @@ namespace net
             Channel acceptChannel_;     //管理acceptSocket_的channel
             NewConnectionCallback newConnectionCallback_;   //处理新连接的回调，可以自定义
             bool listenning_;           //是否监听
-            int idlefd_;
+            int idlefd_;                //空闲的文件描述符，当连接数跑满文件描述符时，就把该文件描述符关闭
 
     };
 }

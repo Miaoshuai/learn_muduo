@@ -78,12 +78,12 @@ void Acceptor::handleRead()
     {
         LOG_SYSERR << "in Acceptor::handleRead";
 
-        if(errno == EMFILE)
+        if(errno == EMFILE) //文件描述符用完，新连接不能处理
         {
-            ::close(idleFd_);
-            idleFd_ = ::accept(acceptSocket_.fd(),NULL,NULL);
-            :close(idleFd_);
-            idleFd_ = ::open("/dev/null",O_RDONLY | O_CLOEXEC);
+            ::close(idleFd_);   //关闭此空闲文件描述符
+            idleFd_ = ::accept(acceptSocket_.fd(),NULL,NULL);   //获取连接
+            :close(idleFd_);    //关闭新连接
+            idleFd_ = ::open("/dev/null",O_RDONLY | O_CLOEXEC); //再次占用该文件描述符
         }
     }
     

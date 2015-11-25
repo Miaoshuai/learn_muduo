@@ -6,6 +6,13 @@
     > Created Time: 2015年11月15日 星期日 17时19分47秒
  =======================================================*/
 
+/*用户只需要在Tcpserver中给每个channel对象设置好connectionCallback(连接回调)和messageCallback(消息回调即可)
+ */
+
+
+
+
+
 #ifndef MUDUO_NET_TCPCONNECTION_H
 #define MUDUO_NET_TCPCONNEXTION_H
 

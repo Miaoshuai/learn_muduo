@@ -88,7 +88,7 @@ void TcpServer::newConnection(int sockfd,const InetAddress &peerAddr)
 
     //创建连接对象
     TcpConnectionPtr conn(new TcpConnection(ioLoop,     //连接固定属于某个ioloop
-                                           connName,
+                                           connName,    //相当于每来一个连接我们给它用channe封装并给一个loop中
                                            sockfd,
                                            localAddr,
                                            peerAddr));

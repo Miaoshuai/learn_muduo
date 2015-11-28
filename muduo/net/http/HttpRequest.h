@@ -138,6 +138,7 @@ namespace net
                 return receiveTime_;
             }
 
+            //增加请求头的内容
             void addHeader(const char *start,const char *colon,const char *end)
             {
                 string field(start,colon);
@@ -190,7 +191,7 @@ namespace net
             string path_;       //请求的路径
             string query;
             Timestamp receiveTime_; //请求返回的时间
-            std::map<string,string> headers_;
+            std::map<string,string> headers_;//请求头的额各个选项
 
     };
 }

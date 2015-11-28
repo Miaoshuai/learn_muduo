@@ -43,9 +43,9 @@ HttpServer::HttpServer(EventLoop *loop,
                        TcpServer::Option option)
 {
     server_.setConnectionCallback(
-            boost::bind(&HttpServer::onConnection,this,_1));
+            boost::bind(&HttpServer::onConnection,this,_1));    //设置连接回调
     server_.setMessageCallback(
-            boost::bind(&HttpServer::onMessage,this,_1,_2,_3));
+            boost::bind(&HttpServer::onMessage,this,_1,_2,_3)); //设置消息回调
 }
 
 HttpServer::~HttpServer()
@@ -62,7 +62,7 @@ void HttpServer::onConnection(const TcpConnectionPtr &conn)
 {
     if(conn->connected())
     {
-        conn->setContext(HttpContext());
+        conn->setContext(HttpContext());//设置连接的内容
     }
 }
 
@@ -70,7 +70,7 @@ void HttpServer::onMessage(const TcpConnectionPtr &conn,
                            Buffer *buf,
                            Timestamp receiveTime)
 {
-    HttpContext *context = boost::any_cast<HttpContext>(conn->getMutableContext());
+    HttpContext *context = boost::any_cast<HttpContext>(conn->getMutableContext()); //boost::any可以为任意类型
     if(!context->parseRequest(buf,receiveTime))
     {
         conn->send("HTTP/1.1 400 Bad Request\r\n\r\n");
